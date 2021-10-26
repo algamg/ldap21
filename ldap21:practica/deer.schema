@@ -13,7 +13,7 @@ attributetype ( 1.1.2.1.1 NAME 'x-foto'
 	DESC 'Foto del animal'
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.28 )
 
-attributetype ( 1.1.2.1.2 NAME 'x-animal'
+attributetype ( 1.1.2.1.2 NAME 'x-raza'
 	DESC 'Que animal es'
 	EQUALITY caseIgnoreMatch
 	SUBSTR	caseIgnoreSubstringsMatch
@@ -25,16 +25,25 @@ attributetype ( 1.1.2.1.3 NAME 'x-tipo'
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX	1.3.6.1.4.1.1466.115.121.1.15 )
 
-attributetype ( 1.1.2.1.4 NAME 'x-web'
-	DESC 'Pagina web del animal'
+attributetype ( 1.1.2.1.4 NAME 'x-descripcion'
+	DESC 'Descripcion del animal'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 )
 
 attributetype ( 1.1.2.1.5 NAME 'x-vacuna'
 	DESC 'Estat de vacunacio true/false'
-	EQUALITY booleanMatch
-	SYNTAX 1.3.6.1.4.1.1466.11.121.1.7 )
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7 )
 
 attributetype ( 1.1.2.1.6 NAME 'x-nacionalidad'
 	DESC 'Nacionalitat del animal'
 	EQUALITY caseIgnoreMatch
-	SYNTAX 1.3.6.1.1466.115.121.1.11 )
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.11 )
+	
+objectclass ( 1.1.2.2.1 NAME 'x-animal'
+	DESC 'Info Animal'
+	SUP inetOrgPerson
+	STRUCTURAL
+	MUST ( x-foto $ x-tipo $ x-raza $ x-descripcion )
+	MAY ( x-nacionalidad)
+	)

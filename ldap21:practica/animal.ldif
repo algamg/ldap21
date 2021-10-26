@@ -1,0 +1,13 @@
+dn: ou=animals,dc=edt,dc=org
+ou: animals
+description: Container de animals
+objectClass: organizationalunit
+
+dn: cn=deer,ou=animals,dc=edt,dc=org
+cn: deer
+sn: deer chileno papi
+objectClass: x-animal
+x-foto:<file:/opt/docker/ciervo.jpeg
+x-descripcion: Ciervo de los andes
+x-tipo: Mamifero
+x-raza: Hippocamelus bisulcus
