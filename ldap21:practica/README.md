@@ -12,11 +12,9 @@ ASIX M06-ASO Escola del treball de barcelona
  * **edtasixm06/ldap21:practica** Servidor LDAP amb la base de dades edt.org
    S'ha fet el següent:
 
-   * deer.schema
+   * animal.schema. Structural derivat de inetOrgPerson.
 
-   * dolphin.schema. Structural derivat de TOP.
-
-   * eagle.schema. Auxiliary.
+   * extincion.schema. Auxiliary.
 
 
 ```
