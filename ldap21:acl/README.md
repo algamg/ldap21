@@ -9,17 +9,84 @@ Podeu trobar la documentació del mòdul a [ASIX-M06](https://sites.google.com/s
 ASIX M06-ASO Escola del treball de barcelona
 
 
- * **algamg/ldap21:grups** Servidor LDAP amb la base de dades edt.org
+ * **algamg/ldap21:acl** Servidor LDAP amb la base de dades edt.org
    S'ha fet el següent:
-
-   * Afegit una ou=grups.
 
    * Hem definit els següents grups amb el seus usuaris alumnes,professors,1asix,2asix,wheel,1wiam,2wiam,1hiaw.
 
 
 
-```
-$ docker run --rm --name ldap.edt.org -h ldap.edt.org --net 2hisix -p 389:389 -d algamg/ldap21:grups
+1) access to * by * read 
+- anonymous 
+- read propi / altres 
+- write propi 
+- write altres 
 
-$ docker run --rm --name phpldapadmin.edt.org -h phpldapadmin.edt.org --net 2hisix -p 80:80 -d edtasixm06/phpldapadmin:20
+## annonymous
+ldapsearch -x -LLL | OK
+
+## read propi / altres | anna
+ldapsearch -x -LLL -D 'uid=anna,ou=usuaris,dc=edt,dc=org' -w anna 'uid=anna' | OK
+ldapsearch -x -LLL -D 'uid=anna,ou=usuaris,dc=edt,dc=org' -w anna 'uid=pere' | OK
+
+## write propi & altres | anna
+```modify.ldif
+dn: uid=anna,ou=usuaris,dc=edt,dc=org
+changetype: modify
+replace: description
+description: JOHN CENA
+
+dn: uid=pere,ou=usuaris,dc=edt,dc=org
+changetype: modify
+delete: homephone
 ```
+ldapmodify -vxc -D 'uid=anna,ou=usuaris,dc=edt,dc=org' -w anna  -f modify.ldif | ERROR 
+
+2) acces to * by * write 
+- modificar propi 
+- modificar altre 
+
+## modificar propi | anna
+```modify.ldif
+dn: uid=anna,ou=usuaris,dc=edt,dc=org
+changetype: modify
+replace: description
+description: JOHN CENA
+
+ldapmodify -vxc -D 'uid=anna,ou=usuaris,dc=edt,dc=org' -w anna  -f modify.ldif | OK 
+```
+
+## modificar altre | anna
+```modify.ldif
+dn: uid=pere,ou=usuaris,dc=edt,dc=org
+changetype: modify
+delete: description
+
+ldapmodify -vxc -D 'uid=anna,ou=usuaris,dc=edt,dc=org' -w anna  -f modify.ldif | OK 
+```
+
+3) acces to * by self write by * read 
+- modicar el propi 
+- modificar un altre 
+- veure altre 
+
+## modificar propi | anna
+```modify.ldif
+dn: uid=anna,ou=usuaris,dc=edt,dc=org
+changetype: modify
+replace: description
+description: JOHN CENA
+
+ldapmodify -vxc -D 'uid=anna,ou=usuaris,dc=edt,dc=org' -w anna  -f modify.ldif | OK 
+```
+## modificar altre | anna
+```modify.ldif
+dn: uid=pere,ou=usuaris,dc=edt,dc=org
+changetype: modify
+add: description
+description: UNDERTAKER
+
+ldapmodify -vxc -D 'uid=anna,ou=usuaris,dc=edt,dc=org' -w anna  -f modify.ldif | ERROR
+```
+## veure altre 
+ldapsearch -x -LLL -D 'uid=anna,ou=usuaris,dc=edt,dc=org' -w anna 'uid=pere' | OK
