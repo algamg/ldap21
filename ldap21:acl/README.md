@@ -12,8 +12,9 @@ ASIX M06-ASO Escola del treball de barcelona
  * **algamg/ldap21:acl** Servidor LDAP amb la base de dades edt.org
    S'ha fet el següent:
 
-   * Hem definit els següents grups amb el seus usuaris alumnes,professors,1asix,2asix,wheel,1wiam,2wiam,1hiaw.
-
+      * Eliminats els schema innecessàris
+      * Definir la base de dades cn=config amb usuari 
+        cn=Sysadmin,cn=config i passwd syskey
 
 
 1) access to * by * read 
